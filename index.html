@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resorts CRM • Luxo Exclusivo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root { --gold: #d4af77; }
+        .title-font { font-family: 'Playfair Display', serif; }
+        .hero-bg {
+            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.8)), url('https://picsum.photos/id/1015/2000/1200') center/cover;
+        }
+        .logo-img { filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4)); }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-200">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md py-5 border-b border-amber-900">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <img src="https://i.imgur.com/7yNKR.png" alt="Logo" class="h-12">
+            <h1 class="text-3xl font-bold title-font text-white">Resorts CRM</h1>
+        </div>
+        <div class="hidden md:flex gap-8 font-medium">
+            <a onclick="navigateTo('home')" class="hover:text-amber-400 cursor-pointer">Início</a>
+            <a onclick="navigateTo('quartos')" class="hover:text-amber-400 cursor-pointer">Quartos</a>
+            <a onclick="navigateTo('reservas')" class="hover:text-amber-400 cursor-pointer">Reservar</a>
+            <a onclick="navigateTo('minhas-reservas')" class="hover:text-amber-400 cursor-pointer">Minhas Reservas</a>
+            <a onclick="navigateTo('login')" class="hover:text-amber-400 cursor-pointer">Login</a>
+        </div>
+        <button onclick="logout()" id="btn-logout" class="hidden bg-red-500 px-6 py-2 rounded-3xl text-sm">Sair</button>
+    </div>
+</nav>
+
+<!-- HOME -->
+<section id="home" class="hero-bg min-h-screen flex items-center pt-20">
+    <div class="max-w-7xl mx-auto px-6 text-white text-center">
+        <img src="https://i.imgur.com/7yNKR.png" class="h-28 mx-auto mb-6">
+        <h1 class="text-7xl md:text-8xl font-bold title-font">Resorts CRM</h1>
+        <p class="text-2xl mt-8 max-w-2xl mx-auto">Maximize experiências, fidelize hóspedes</p>
+        <button onclick="navigateTo('reservas')" class="mt-12 bg-amber-600 hover:bg-amber-700 px-12 py-5 rounded-3xl text-xl font-semibold">Fazer Reserva Agora</button>
+    </div>
+</section>
+
+<!-- LOGIN -->
+<section id="login" class="min-h-screen flex items-center justify-center bg-zinc-900 hidden">
+    <div class="max-w-md w-full mx-4 bg-zinc-800 rounded-3xl p-10">
+        <img src="https://i.imgur.com/7yNKR.png" class="h-20 mx-auto mb-6">
+        <h2 class="text-4xl font-bold title-font text-center">Login</h2>
+        <form onsubmit="fazerLogin(event)" class="mt-8 space-y-6">
+            <input type="email" id="email" placeholder="E-mail" value="demo@resortscrm.com" class="w-full px-6 py-5 bg-zinc-700 rounded-3xl">
+            <input type="password" id="senha" placeholder="Senha" value="123456" class="w-full px-6 py-5 bg-zinc-700 rounded-3xl">
+            <button type="submit" class="w-full py-6 bg-amber-600 text-white text-xl font-semibold rounded-3xl">Entrar</button>
+        </form>
+        <p class="text-center text-sm mt-6 text-zinc-400">Demo: demo@resortscrm.com / 123456</p>
+    </div>
+</section>
+
+<!-- QUARTOS -->
+<section id="quartos" class="py-24 bg-white text-zinc-900 hidden">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-5xl font-bold title-font text-center">Quartos Luxuosos</h2>
+        <div id="quartos-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12"></div>
+    </div>
+</section>
+
+<!-- FAZER RESERVA -->
+<section id="reservas" class="py-24 bg-zinc-900 hidden">
+    <div class="max-w-2xl mx-auto px-6">
+        <h2 class="text-5xl font-bold title-font text-center text-white">Fazer Reserva</h2>
+        <div class="mt-12 bg-white rounded-3xl p-10">
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm mb-2">Check-in</label>
+                    <input type="date" id="checkin" class="w-full px-6 py-5 border rounded-3xl">
+                </div>
+                <div>
+                    <label class="block text-sm mb-2">Check-out</label>
+                    <input type="date" id="checkout" class="w-full px-6 py-5 border rounded-3xl">
+                </div>
+            </div>
+            <select id="quarto-selecionado" class="w-full mt-8 px-6 py-5 border rounded-3xl"></select>
+            <button onclick="confirmarReserva()" class="mt-10 w-full py-7 bg-gradient-to-r from-amber-600 to-amber-700 text-white text-2xl rounded-3xl">Confirmar Reserva</button>
+        </div>
+    </div>
+</section>
+
+<!-- MINHAS RESERVAS -->
+<section id="minhas-reservas" class="py-24 bg-white text-zinc-900 hidden">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-5xl font-bold title-font text-center mb-12">Minhas Reservas</h2>
+        <div id="lista-reservas" class="space-y-6"></div>
+    </div>
+</section>
+
+<script>
+// ==================== DADOS E ESTADO ====================
+let usuarioLogado = null;
+let reservas = JSON.parse(localStorage.getItem('reservas')) || [];
+
+// Quartos disponíveis
+const quartos = [
+    { id: 1, nome: "Villa Presidencial Oceano", preco: 12500 },
+    { id: 2, nome: "Suíte Imperial", preco: 8900 },
+    { id: 3, nome: "Villa Mata Atlântica", preco: 6500 }
+];
+
+// ==================== LOGIN ====================
+function fazerLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    
+    if (email) {
+        usuarioLogado = email;
+        localStorage.setItem('usuarioLogado', email);
+        alert(`✅ Login realizado com sucesso!\nBem-vindo(a), ${email}`);
+        atualizarNavbar();
+        navigateTo('home');
+    }
+}
+
+function logout() {
+    usuarioLogado = null;
+    localStorage.removeItem('usuarioLogado');
+    atualizarNavbar();
+    navigateTo('home');
+    alert('Você saiu da conta.');
+}
+
+function atualizarNavbar() {
+    const btnLogout = document.getElementById('btn-logout');
+    if (usuarioLogado) {
+        btnLogout.classList.remove('hidden');
+    } else {
+        btnLogout.classList.add('hidden');
+    }
+}
+
+// ==================== RESERVAS ====================
+function carregarQuartosSelect() {
+    const select = document.getElementById('quarto-selecionado');
+    select.innerHTML = quartos.map(q => 
+        `<option value="${q.id}">${q.nome} - R$ ${q.preco}/noite</option>`
+    ).join('');
+}
+
+function confirmarReserva() {
+    if (!usuarioLogado) {
+        alert('Você precisa fazer login para reservar!');
+        navigateTo('login');
+        return;
+    }
+
+    const checkin = document.getElementById('checkin').value;
+    const checkout = document.getElementById('checkout').value;
+    const quartoId = parseInt(document.getElementById('quarto-selecionado').value);
+    const quarto = quartos.find(q => q.id === quartoId);
+
+    if (!checkin || !checkout) {
+        alert('Preencha as datas!');
+        return;
+    }
+
+    const novaReserva = {
+        id: Date.now(),
+        usuario: usuarioLogado,
+        quarto: quarto.nome,
+        checkin: checkin,
+        checkout: checkout,
+        valor: quarto.preco * 5, // 5 noites simuladas
+        status: 'Confirmada'
+    };
+
+    reservas.push(novaReserva);
+    localStorage.setItem('reservas', JSON.stringify(reservas));
+
+    alert('🎉 Reserva confirmada com sucesso!');
+    navigateTo('minhas-reservas');
+}
+
+function mostrarMinhasReservas() {
+    const container = document.getElementById('lista-reservas');
+    container.innerHTML = '';
+
+    const minhas = reservas.filter(r => r.usuario === usuarioLogado);
+
+    if (minhas.length === 0) {
+        container.innerHTML = `<p class="text-center py-12 text-xl text-zinc-400">Você ainda não tem reservas.</p>`;
+        return;
+    }
+
+    minhas.forEach(res => {
+        const div = document.createElement('div');
+        div.className = "bg-zinc-100 border border-amber-200 rounded-3xl p-8 flex justify-between items-center";
+        div.innerHTML = `
+            <div>
+                <h3 class="font-bold text-2xl">${res.quarto}</h3>
+                <p class="text-sm text-zinc-500">${res.checkin} → ${res.checkout}</p>
+            </div>
+            <div class="text-right">
+                <span class="bg-emerald-200 text-emerald-800 px-6 py-2 rounded-3xl text-sm">${res.status}</span>
+                <p class="text-3xl font-bold mt-4">R$ ${res.valor}</p>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+// ==================== NAVEGAÇÃO ====================
+function navigateTo(pagina) {
+    document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+    document.getElementById(pagina).classList.remove('hidden');
+
+    if (pagina === 'quartos') renderQuartos();
+    if (pagina === 'reservas') carregarQuartosSelect();
+    if (pagina === 'minhas-reservas') mostrarMinhasReservas();
+}
+
+function renderQuartos() {
+    const container = document.getElementById('quartos-grid');
+    container.innerHTML = quartos.map(q => `
+        <div class="bg-white border border-amber-100 rounded-3xl p-8 hover:shadow-xl">
+            <h3 class="text-2xl font-bold">${q.nome}</h3>
+            <p class="text-4xl font-bold text-amber-600 mt-6">R$ ${q.preco}</p>
+            <button onclick="navigateTo('reservas')" class="mt-8 w-full py-4 bg-amber-600 text-white rounded-3xl">Reservar</button>
+        </div>
+    `).join('');
+}
+
+// ==================== INICIALIZAÇÃO ====================
+function init() {
+    lucide.createIcons();
+    
+    // Verifica se já estava logado
+    const usuarioSalvo = localStorage.getItem('usuarioLogado');
+    if (usuarioSalvo) {
+        usuarioLogado = usuarioSalvo;
+        atualizarNavbar();
+    }
+
+    // Renderiza página inicial
+    navigateTo('home');
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
