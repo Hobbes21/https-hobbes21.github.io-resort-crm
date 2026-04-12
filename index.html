@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lone Star Luxe Resort • Texas Hill Country</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        .luxury-font {
+            font-family: 'Playfair Display', serif;
+        }
+        .hero-bg {
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url('https://picsum.photos/id/1015/2000/1200') center/cover;
+        }
+        .room-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px -15px rgb(212 175 119 / 0.3);
+        }
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #d4af77;
+            transition: width 0.3s;
+        }
+        .nav-link:hover:after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-stone-950 text-stone-100">
+
+    <!-- NAVBAR -->
+    <nav class="bg-stone-950 border-b border-amber-300/20 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-gem text-4xl text-amber-300"></i>
+                <div>
+                    <h1 class="luxury-font text-4xl tracking-tight">LONE STAR LUXE</h1>
+                    <p class="text-xs text-amber-300 tracking-widest -mt-1">RESORT • TEXAS</p>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center gap-10 text-lg">
+                <a href="#home" class="nav-link cursor-pointer hover:text-amber-300">Início</a>
+                <a href="#sobre" class="nav-link cursor-pointer hover:text-amber-300">Sobre</a>
+                <a href="#quartos" class="nav-link cursor-pointer hover:text-amber-300">Quartos</a>
+                <a href="#reservas" class="nav-link cursor-pointer hover:text-amber-300">Reservar</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button onclick="toggleLanguage()" class="px-6 py-3 border border-amber-300 text-amber-300 rounded-3xl text-sm flex items-center gap-2 hover:bg-amber-300 hover:text-stone-950">
+                    <i class="fa-solid fa-globe"></i>
+                    <span id="lang-btn">EN / PT</span>
+                </button>
+
+                <button onclick="showLoginModal()" id="login-btn"
+                        class="bg-amber-300 text-stone-950 px-8 py-3 rounded-3xl font-medium flex items-center gap-2">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Entrar</span>
+                </button>
+
+                <div id="user-info" class="hidden items-center gap-3 cursor-pointer" onclick="logout()">
+                    <div class="w-9 h-9 bg-amber-300 rounded-2xl flex items-center justify-center text-stone-950">
+                        👤
+                    </div>
+                    <span id="user-name" class="font-medium"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="home" class="hero-bg h-screen flex items-center">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h1 id="hero-title" class="luxury-font text-7xl md:text-8xl leading-none mb-6">
+                Luxo autêntico<br>no coração do Texas
+            </h1>
+            <p id="hero-subtitle" class="text-2xl text-stone-300 max-w-2xl mx-auto">
+                68 suítes e villas exclusivas • Experiências premium • Hill Country, Texas
+            </p>
+            <div class="mt-12 flex justify-center gap-6">
+                <a href="#reservas" class="bg-amber-300 text-stone-950 px-12 py-6 rounded-3xl text-xl font-medium">Reservar agora</a>
+                <a href="#sobre" class="border-2 border-white/70 hover:border-amber-300 px-12 py-6 rounded-3xl text-xl">Conheça o resort</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section id="sobre" class="max-w-7xl mx-auto px-6 py-24">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+                <h2 id="sobre-title" class="luxury-font text-6xl leading-none">Um refúgio de luxo<br>nas colinas do Texas</h2>
+                <p id="sobre-text" class="mt-8 text-lg text-stone-300">
+                    Localizado em Fredericksburg, Texas Hill Country, o Lone Star Luxe oferece tranquilidade, sofisticação e experiências inesquecíveis.
+                </p>
+            </div>
+            <div class="grid grid-cols-2 gap-6">
+                <img src="https://picsum.photos/id/1015/800/600" class="rounded-3xl" alt="Resort">
+                <img src="https://picsum.photos/id/866/800/600" class="rounded-3xl" alt="Villa">
+                <img src="https://picsum.photos/id/201/800/600" class="rounded-3xl" alt="Piscina">
+                <img src="https://picsum.photos/id/1005/800/600" class="rounded-3xl" alt="Spa">
+            </div>
+        </div>
+    </section>
+
+    <!-- QUARTOS -->
+    <section id="quartos" class="bg-stone-900 py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 id="quartos-title" class="luxury-font text-6xl text-center mb-12">Nossos Quartos & Villas</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="rooms-grid">
+                <!-- Preenchido pelo JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- RESERVAS -->
+    <section id="reservas" class="max-w-7xl mx-auto px-6 py-24">
+        <div class="max-w-2xl mx-auto bg-white/5 backdrop-blur-xl border border-amber-300/20 rounded-3xl p-10">
+            <h2 id="reserva-title" class="luxury-font text-5xl text-center mb-8">Faça sua Reserva</h2>
+            <form id="booking-form" onsubmit="handleBooking(event)" class="space-y-8">
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm text-amber-300 mb-2">Check-in</label>
+                        <input type="date" id="checkin" required class="w-full bg-transparent border border-stone-600 rounded-2xl px-6 py-5">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-amber-300 mb-2">Check-out</label>
+                        <input type="date" id="checkout" required class="w-full bg-transparent border border-stone-600 rounded-2xl px-6 py-5">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm text-amber-300 mb-2">Tipo de Acomodação</label>
+                    <select id="room-type" class="w-full bg-transparent border border-stone-600 rounded-2xl px-6 py-5">
+                        <!-- Preenchido pelo JS -->
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-amber-300 text-stone-950 py-6 rounded-3xl text-xl font-medium">Confirmar Reserva</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- MODAL LOGIN -->
+    <div id="login-modal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+        <div class="bg-stone-900 w-full max-w-md mx-4 rounded-3xl p-10">
+            <h3 class="luxury-font text-4xl mb-8">Entrar / Cadastrar</h3>
+            <input id="email" type="email" placeholder="Seu e-mail" class="w-full mb-4 bg-stone-800 border border-stone-700 rounded-2xl px-6 py-5">
+            <input id="password" type="password" placeholder="Senha" class="w-full mb-8 bg-stone-800 border border-stone-700 rounded-2xl px-6 py-5">
+            <button onclick="handleLogin()" class="w-full bg-amber-300 text-stone-950 py-5 rounded-3xl mb-4">Entrar</button>
+            <button onclick="handleRegister()" class="w-full border border-amber-300 py-5 rounded-3xl">Criar conta</button>
+            <button onclick="hideLoginModal()" class="mt-6 text-stone-400 w-full">Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CONFIGURAÇÃO SUPABASE ====================
+        let SUPABASE_URL = localStorage.getItem('supabase_url') || '';
+        let SUPABASE_ANON_KEY = localStorage.getItem('supabase_key') || '';
+        let supabase = null;
+
+        function initSupabase() {
+            if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+                supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ Supabase inicializado');
+            } else {
+                console.warn('⚠️ Configure sua URL e Key do Supabase no modal');
+            }
+        }
+
+        // ==================== DADOS DOS QUARTOS (mais opções) ====================
+        const roomsData = [
+            { id: 1, name: "King Hill View Suite", price: 895, guests: 2, img: "https://picsum.photos/id/1015/800/600" },
+            { id: 2, name: "Presidential Villa com Piscina", price: 1895, guests: 6, img: "https://picsum.photos/id/866/800/600" },
+            { id: 3, name: "Riverside Luxury Cabin", price: 1195, guests: 4, img: "https://picsum.photos/id/201/800/600" },
+            { id: 4, name: "Spa Retreat Suite", price: 695, guests: 2, img: "https://picsum.photos/id/1005/800/600" },
+            { id: 5, name: "Honeymoon Treehouse Villa", price: 1395, guests: 2, img: "https://picsum.photos/id/133/800/600" },
+            { id: 6, name: "Executive Penthouse", price: 2495, guests: 4, img: "https://picsum.photos/id/1016/800/600" },
+            { id: 7, name: "Deluxe Double Room", price: 550, guests: 2, img: "https://picsum.photos/id/180/800/600" }
+        ];
+
+        function renderRooms() {
+            const grid = document.getElementById('rooms-grid');
+            grid.innerHTML = '';
+            roomsData.forEach(room => {
+                const card = document.createElement('div');
+                card.className = 'room-card bg-stone-900 border border-amber-300/10 rounded-3xl overflow-hidden';
+                card.innerHTML = `
+                    <img src="${room.img}" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl luxury-font">${room.name}</h3>
+                        <p class="text-amber-300 text-xl mt-2">US$ ${room.price} / noite</p>
+                        <p class="text-sm text-stone-400 mt-1">${room.guests} hóspedes</p>
+                        <button onclick="quickBook(${room.id})" class="mt-6 w-full bg-amber-300 text-stone-950 py-4 rounded-2xl text-sm font-medium">Reservar esta acomodação</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Preenche select de reservas
+            const select = document.getElementById('room-type');
+            roomsData.forEach(room => {
+                const opt = document.createElement('option');
+                opt.value = room.id;
+                opt.textContent = `${room.name} — US$ ${room.price}/noite`;
+                select.appendChild(opt);
+            });
+        }
+
+        // ==================== LOGIN E RESERVA ====================
+        let currentUser = null;
+
+        async function handleLogin() {
+            if (!supabase) initSupabase();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) return alert('Erro: ' + error.message);
+            currentUser = data.user;
+            hideLoginModal();
+            updateUserUI();
+        }
+
+        async function handleRegister() {
+            if (!supabase) initSupabase();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const { error } = await supabase.auth.signUp({ email, password });
+            if (error) return alert(error.message);
+            alert('Conta criada! Verifique seu e-mail.');
+        }
+
+        function updateUserUI() {
+            if (currentUser) {
+                document.getElementById('user-info').classList.remove('hidden');
+                document.getElementById('login-btn').classList.add('hidden');
+                document.getElementById('user-name').textContent = currentUser.email.split('@')[0];
+            }
+        }
+
+        function logout() {
+            if (confirm('Deseja sair?')) location.reload();
+        }
+
+        async function handleBooking(e) {
+            e.preventDefault();
+            if (!currentUser) {
+                alert('Faça login para reservar');
+                showLoginModal();
+                return;
+            }
+            if (!supabase) initSupabase();
+
+            const checkin = document.getElementById('checkin').value;
+            const checkout = document.getElementById('checkout').value;
+            const roomId = parseInt(document.getElementById('room-type').value);
+            const room = roomsData.find(r => r.id === roomId);
+
+            const { error } = await supabase.from('reservations').insert({
+                user_id: currentUser.id,
+                room_id: roomId,
+                room_name: room.name,
+                check_in: checkin,
+                check_out: checkout,
+                status: 'pending'
+            });
+
+            if (error) {
+                alert('Erro ao fazer reserva: ' + error.message);
+            } else {
+                alert(`✅ Reserva realizada com sucesso para ${room.name}!\n\nUma notificação foi enviada para o seu e-mail (configurada via Supabase).`);
+                e.target.reset();
+            }
+        }
+
+        function quickBook(id) {
+            document.getElementById('room-type').value = id;
+            document.getElementById('reservas').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ==================== MODAIS E IDIOMA ====================
+        function showLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+        function hideLoginModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+        }
+
+        let currentLang = 'pt';
+        function toggleLanguage() {
+            currentLang = currentLang === 'pt' ? 'en' : 'pt';
+            document.getElementById('lang-btn').textContent = currentLang.toUpperCase() + ' / ' + (currentLang === 'pt' ? 'EN' : 'PT');
+            // Você pode expandir as traduções aqui se quiser
+            alert('Idioma alterado para ' + (currentLang === 'pt' ? 'Português' : 'English'));
+        }
+
+        // Inicialização
+        window.onload = () => {
+            renderRooms();
+            initSupabase();
+            console.log('%cLone Star Luxe Resort - Site luxuoso carregado com sucesso!', 'color:#d4af77; font-size:16px');
+        };
+    </script>
+</body>
+</html>
