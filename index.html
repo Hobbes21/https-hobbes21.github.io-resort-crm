@@ -15,6 +15,13 @@
         }
         .logo-img { filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4)); }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+const supabaseUrl = 'https://emooaouxaarjayicciir.supabase.com';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtb29hb3V4YWFyamF5aWNjaWlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTYwMDIsImV4cCI6MjA5MTU5MjAwMn0.pOvCpQhPhqjEoZynDid8ccf7CpfLphK-HTGv3UvspjM';
+
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+</script>
 </head>
 <body class="bg-zinc-950 text-zinc-200">
 
