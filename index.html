@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Hotel USA • Book Your Stay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+       
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+       
+        .hero-bg {
+            background-image: url('https://picsum.photos/id/1015/2000/1200');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .room-card {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+       
+        .room-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .room-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 50px -15px rgb(0 0 0 / 0.5);
+        }
+
+        .room-detail {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+       
+        .room-card:hover .room-detail,
+        .room-card.active .room-detail {
+            opacity: 1;
+            max-height: 480px;
+        }
+
+        .price-tag {
+            transition: all 0.4s ease;
+        }
+       
+        .room-card:hover .price-tag {
+            transform: scale(1.08);
+            background-color: #f59e0b;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white">
+
+    <!-- Hero -->
+    <div class="hero-bg min-h-screen flex items-center relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/90"></div>
+        
+        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-6 py-2 rounded-3xl text-sm font-medium mb-6">
+                🇺🇸 UNITED STATES • LUXURY COLLECTION
+            </div>
+            <h1 class="text-6xl md:text-7xl font-bold leading-tight mb-6">
+                Your luxury<br>escape awaits
+            </h1>
+            <p class="text-xl text-zinc-300 max-w-md mx-auto">
+                Timeless elegance in the heart of the United States
+            </p>
+        </div>
+    </div>
+
+    <!-- Rooms Section - Zigzag -->
+    <div class="max-w-6xl mx-auto px-6 py-24">
+        <div class="text-center mb-16">
+            <h2 class="text-5xl font-bold">Our Signature Rooms</h2>
+            <p class="text-zinc-400 mt-4 text-lg">Hover to explore details</p>
+        </div>
+
+        <div class="space-y-24" id="rooms-container">
+            <!-- Os cards serão inseridos via JavaScript em zigzag -->
+        </div>
+    </div>
+
+    <!-- Reservation Form - Menor e Dark -->
+    <div class="bg-zinc-900 py-20">
+        <div class="max-w-2xl mx-auto px-6">
+            <div class="bg-zinc-800/70 backdrop-blur-xl border border-zinc-700 rounded-3xl p-10 shadow-2xl">
+                <h2 class="text-3xl font-semibold text-center mb-10">Make your reservation</h2>
+                
+                <form id="formReserva" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-400 mb-2">Full name</label>
+                        <input type="text" id="nome" 
+                               class="w-full px-5 py-3.5 bg-zinc-900 border border-zinc-700 rounded-2xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 outline-none text-white"
+                               placeholder="John Smith" required>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-zinc-400 mb-2">Check-in</label>
+                            <input type="date" id="checkin" 
+                                   class="w-full px-5 py-3.5 bg-zinc-900 border border-zinc-700 rounded-2xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 outline-none text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-zinc-400 mb-2">Check-out</label>
+                            <input type="date" id="checkout" 
+                                   class="w-full px-5 py-3.5 bg-zinc-900 border border-zinc-700 rounded-2xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 outline-none text-white">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-400 mb-2">Room type</label>
+                        <select id="quarto" 
+                                class="w-full px-5 py-3.5 bg-zinc-900 border border-zinc-700 rounded-2xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 outline-none text-white">
+                            <option value="950">Standard Room — $950 / night</option>
+                            <option value="2000">Luxury Deluxe — $2,000 / night</option>
+                            <option value="5000" selected>Presidential Suite — $5,000 / night</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-zinc-400 mb-2">Adults</label>
+                            <input type="number" id="adultos" value="2" min="1" 
+                                   class="w-full px-5 py-3.5 bg-zinc-900 border border-zinc-700 rounded-2xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 outline-none text-center text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-zinc-400 mb-2">Children</label>
+                            <input type="number" id="criancas" value="0" min="0" 
+                                   class="w-full px-5 py-3.5 bg-zinc-900 border border-zinc-700 rounded-2xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 outline-none text-center text-white">
+                        </div>
+                    </div>
+
+                    <div id="price-display" class="bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-3xl p-6 text-center mt-8">
+                        <p class="text-xs uppercase tracking-widest mb-1">Estimated total</p>
+                        <div id="total-price" class="text-4xl font-bold">$0</div>
+                        <p id="nights-info" class="text-white/70 text-sm mt-1"></p>
+                    </div>
+
+                    <button type="button" id="btn-reservar"
+                            class="w-full bg-amber-500 hover:bg-amber-600 active:scale-95 transition-all duration-300 text-black font-bold text-lg py-4 rounded-3xl mt-4">
+                        CONFIRM RESERVATION
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const rooms = [
+            {
+                id: 1,
+                name: "Standard Room",
+                price: 950,
+                image: "https://picsum.photos/id/1015/800/520",
+                description: "Comfortable and modern room perfect for business or leisure.",
+                size: "38 m²",
+                bed: "King Bed",
+                features: ["Free Wi-Fi", "55\" Smart TV", "Mini Bar", "Rain Shower"]
+            },
+            {
+                id: 2,
+                name: "Luxury Deluxe",
+                price: 2000,
+                image: "https://picsum.photos/id/201/800/520",
+                description: "Elegant room with premium finishes and city views.",
+                size: "62 m²",
+                bed: "King Bed + Sofa",
+                features: ["Free Wi-Fi", "65\" Smart TV", "Nespresso", "Balcony"]
+            },
+            {
+                id: 3,
+                name: "Presidential Suite",
+                price: 5000,
+                image: "https://picsum.photos/id/133/800/520",
+                description: "The pinnacle of luxury with private terrace and butler service.",
+                size: "185 m²",
+                bed: "Master King + 2 Guest Rooms",
+                features: ["Private Terrace", "Butler Service", "Jacuzzi", "Sauna"]
+            }
+        ];
+
+        function createRoomCard(room, isLeft) {
+            return `
+                <div class="room-card bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden group">
+                    <div class="relative">
+                        <img src="${room.image}" alt="${room.name}" 
+                             class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="price-tag absolute top-6 right-6 bg-black/80 backdrop-blur px-5 py-2 rounded-2xl font-bold text-xl shadow">
+                            $${room.price}<span class="text-sm font-normal text-zinc-400">/night</span>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-3xl font-semibold mb-2">${room.name}</h3>
+                        <p class="text-zinc-400 mb-6">${room.description}</p>
+                        
+                        <div class="room-detail space-y-6">
+                            <div class="grid grid-cols-2 gap-y-3 text-sm">
+                                <div><strong class="text-zinc-300">Size:</strong> ${room.size}</div>
+                                <div><strong class="text-zinc-300">Bed:</strong> ${room.bed}</div>
+                            </div>
+                            <div>
+                                <strong class="block mb-4 text-amber-400">Highlights</strong>
+                                <ul class="grid grid-cols-1 gap-2 text-sm text-zinc-300">
+                                    ${room.features.map(f => `
+                                        <li class="flex items-center gap-3">
+                                            <span class="text-emerald-400">✔</span> ${f}
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadRoomsZigzag() {
+            const container = document.getElementById('rooms-container');
+            let html = '';
+
+            rooms.forEach((room, index) => {
+                const isLeft = index % 2 === 0;
+                html += `
+                    <div class="flex flex-col ${isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 items-center">
+                        <div class="flex-1 w-full">
+                            ${createRoomCard(room, isLeft)}
+                        </div>
+                        <div class="flex-1 hidden lg:block"></div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+
+            // Animação de entrada
+            setTimeout(() => {
+                document.querySelectorAll('.room-card').forEach((card, i) => {
+                    setTimeout(() => card.classList.add('visible'), i * 150);
+                });
+            }, 300);
+        }
+
+        // Form functions (mesmas de antes, só ajustadas para tema escuro)
+        function calcularNoites() {
+            const checkin = new Date(document.getElementById('checkin').value);
+            const checkout = new Date(document.getElementById('checkout').value);
+            if (!checkin || !checkout || checkout <= checkin) return 0;
+            return Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+        }
+
+        function atualizarPreco() {
+            const basePrice = parseFloat(document.getElementById('quarto').value) || 0;
+            const adultos = parseInt(document.getElementById('adultos').value) || 0;
+            const criancas = parseInt(document.getElementById('criancas').value) || 0;
+            const noites = calcularNoites();
+            
+            const extraAdulto = Math.max(0, adultos - 2) * 300;
+            const extraCrianca = Math.max(0, criancas - 4) * 150;
+            const total = (basePrice + extraAdulto + extraCrianca) * noites;
+
+            document.getElementById('total-price').textContent = total > 0 ? '$' + total.toLocaleString('en-US') : '$0';
+            document.getElementById('nights-info').textContent = noites > 0 ? `${noites} night${noites > 1 ? 's' : ''}` : 'Select dates';
+        }
+
+        function fazerReserva() {
+            const nome = document.getElementById('nome').value.trim();
+            if (!nome || !document.getElementById('checkin').value) {
+                alert("Please fill all required fields.");
+                return;
+            }
+            alert(`✅ Reservation confirmed for ${nome}! (Demo)`);
+        }
+
+        // Inicialização
+        window.onload = function() {
+            loadRoomsZigzag();
+
+            const inputs = ['quarto', 'adultos', 'criancas', 'checkin', 'checkout'];
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', atualizarPreco);
+            });
+
+            document.getElementById('btn-reservar').addEventListener('click', fazerReserva);
+            atualizarPreco();
+        };
+    </script>
+</body>
+</html>
